@@ -6,3 +6,7 @@ def my_pipeline_function(tag):
 def multiply(x,y):
     z= x * y
     print(z)
+
+def plus(x,y):
+    z= x * y
+    print(z)
