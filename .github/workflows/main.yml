@@ -1,0 +1,37 @@
+name: Pull Request Workflow
+
+on:
+  push:
+    branches:
+      - feature-branch
+
+jobs:
+  create_pull_request:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Automated Pull Request"
+          title: "Feature Branch Changes"
+          body: "Please review and approve these changes."
+          branch: main
+
+      - name: Wait for Approvals
+        uses: peter-evans/wait-for-approval@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request: ${{ steps.create_pull_request.outputs.pull-request-url }}
+          reviewers: PrincessOrika  # Replace with GitHub usernames of the reviewers you want to assign
+
+      - name: Merge Pull Request
+        uses: peter-evans/merge-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request: ${{ steps.create_pull_request.outputs.pull-request-url }}
+          strategy: merge
